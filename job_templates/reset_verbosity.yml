@@ -12,10 +12,6 @@
       ansible.builtin.set_fact:
         jobs: "{{ query('ansible.tower.tower_api', 'job_templates', query_params={ 'verbosity__gt': '0' }) | map(attribute='name') | list }}"
 
-    - name: Show template names
-      debug:
-        msg: "{{ jobs }}"
-
     - name: Change verbose level
       ansible.tower.tower_job_template:
         name: "{{ item }}"
