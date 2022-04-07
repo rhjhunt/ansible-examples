@@ -1,0 +1,24 @@
+---
+- name: Modify verbose level on Job Templates
+  hosts: all
+  vars:
+    verbosity: 0
+  tasks:
+
+    - name: Get list of templates with verbosity greater than 0
+      ansible.builtin.set_fact:
+        jobs: "{{ query('ansible.tower.tower_api', 'job_templates', query_params={ 'verbosity__gt': '0' }) | map(attribute='name') | list }}"
+
+    - name: Show template names
+      debug:
+        msg: "{{ jobs }}"
+
+    - name: Change verbose level
+      ansible.tower.tower_job_template:
+        name: "{{ item }}"
+        verbosity: "{{ verbosity }}"
+        # tower_host:
+        # tower_username:
+        # tower_oauthtoken:
+      loop: "{{ jobs }}"
+
