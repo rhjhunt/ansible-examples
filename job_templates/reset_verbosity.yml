@@ -17,8 +17,8 @@
       ansible.tower.tower_job_template:
         name: "{{ item }}"
         verbosity: "{{ verbosity }}"
-        # tower_host:
-        # tower_username:
-        # tower_oauthtoken:
+        tower_host: "{{ host }}"
+        tower_username: "{{ username }}"
+        tower_oauthtoken: "{{ oauth_token }}"
       loop: "{{ jobs }}"
 
