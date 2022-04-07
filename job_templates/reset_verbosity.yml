@@ -20,6 +20,6 @@
         tower_host: "{{ tower_host }}"
         tower_username: "{{ tower_username }}"
         tower_oauthtoken: "{{ tower_oauthtoken }}"
-      run_once: true
       loop: "{{ jobs }}"
+      run_once: true
 
