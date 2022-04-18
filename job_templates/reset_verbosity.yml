@@ -5,8 +5,8 @@
     verbosity: 0
     tower_host: '{{ lookup("env", "TOWER_HOST") }}'
     tower_username: '{{ lookup("env", "TOWER_USERNAME") }}'
-    tower_oauthtoken: '{{ lookup("env", "TOWER_OAUTH_TOKEN") }}'
-    tower_password: '{{ lookup("env", "TOWER_PASSWORD") }}'
+    tower_oauthtoken: '{{ lookup("env", "TOWER_OAUTH_TOKEN") | default(omit) }}'
+    tower_password: '{{ lookup("env", "TOWER_PASSWORD") | default(omit) }}'
     tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
   tasks:
 
@@ -21,8 +21,8 @@
         verbosity: "{{ verbosity }}"
         tower_host: "{{ tower_host }}"
         tower_username: "{{ tower_username }}"
-        tower_oauthtoken: "{{ tower_oauthtoken | default(omit) }}"
-        tower_password: "{{ tower_password | default(omit) }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
         validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs }}"
       run_once: true
