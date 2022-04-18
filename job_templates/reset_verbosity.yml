@@ -6,6 +6,7 @@
     tower_host: '{{ lookup("env", "TOWER_HOST") }}'
     tower_username: '{{ lookup("env", "TOWER_USERNAME") }}'
     tower_oauthtoken: '{{ lookup("env", "TOWER_OAUTH_TOKEN") }}'
+    tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
   tasks:
 
     - name: Get list of templates with verbosity greater than 0
@@ -20,6 +21,7 @@
         tower_host: "{{ tower_host }}"
         tower_username: "{{ tower_username }}"
         tower_oauthtoken: "{{ tower_oauthtoken }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs }}"
       run_once: true
 
