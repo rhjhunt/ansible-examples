@@ -1,7 +1,7 @@
 ---
 - name: Show current org
   ansible.builtin.debug:
-    msg: "{{ current_org }}"
+    msg: "{{ current_org | type_debug }}"
 
 - name: Generate Org ID list from Org names
   ansible.builtin.set_fact:
