@@ -1,0 +1,171 @@
+---
+- name: Generate Org ID list from Org names
+  ansible.builtin.set_fact:
+    org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') }}"
+
+- name: Get credentials list from organizations
+  ansible.builtin.set_fact:
+    creds: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='name') | list }}"
+
+- name: Get credential type list
+  ansible.builtin.set_fact:
+    cred_kind: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='kind') | list }}"
+
+- name: Build credential dictionary from credentials and types
+  ansible.builtin.set_fact:
+    creds_to_delete: "{{ dict(creds | zip(cred_kind)) }}"
+
+- name: Get project list from organizations
+  ansible.builtin.set_fact:
+    projects_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/projects', return_all=true) | map(attribute='name') | list }}"
+
+- name: Get inventory list from organizations
+  ansible.builtin.set_fact:
+    inventory_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/inventories', return_all=true) | map(attribute='name') | list }}"
+
+- name: Get jobs list from organizations
+  ansible.builtin.set_fact:
+    jobs_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/job_templates', return_all=true) | map(attribute='name') | list }}"
+
+- name: Get workflow list from organizations
+  ansible.builtin.set_fact:
+    workflow_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/workflow_job_templates', return_all=true) | map(attribute='name') | list }}"
+
+- name: Get applications list from organizations
+  ansible.builtin.set_fact:
+    apps_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/applications') | map(attribute='name') | list }}"
+
+- name: Get team list from organizations
+  ansible.builtin.set_fact:
+    teams_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/teams') | map(attribute='name') | list }}"
+
+- name: Get user list from organizations
+  ansible.builtin.set_fact:
+    users_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/users') | map(attribute='username') | list }}"
+
+- name: Show lists
+  block:
+
+    - name: Show credentials to delete
+      ansible.builtin.debug:
+        msg: "{{ creds_to_delete }}"
+
+    - name: Show projects to delete
+      ansible.builtin.debug:
+        msg: "{{ projects_to_delete }}"
+
+    - name: Show inventories to delete
+      ansible.builtin.debug:
+        msg: "{{ inventory_to_delete }}"
+
+    - name: Show jobs to delete
+      ansible.builtin.debug:
+        msg: "{{ jobs_to_delete }}"
+
+    - name: Show workflows to delete
+      ansible.builtin.debug:
+        msg: "{{ workflow_to_delete }}"
+
+    - name: Show applications to delete
+      ansible.builtin.debug:
+        msg: "{{ apps_to_delete }}"
+
+    - name: Show teams to delete
+      ansible.builtin.debug:
+        msg: "{{ teams_to_delete }}"
+
+    - name: Show users to delete
+      ansible.builtin.debug:
+        msg: "{{ users_to_delete }}"
+
+  when: show_list | bool
+
+- name: Delete artifacts
+  block:
+
+    - name: Delete users
+      ansible.tower.tower_user:
+        username: "{{ user_item }}"
+        state: absent
+      loop: "{{ users_to_delete }}"
+      loop_control:
+        loop_var: user_item
+      when: users_to_delete | length > 0
+
+    - name: Delete teams
+      ansible.tower.tower_team:
+        name: "{{ team_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ teams_to_delete }}"
+      loop_control:
+        loop_var: team_item
+      when: teams_to_delete | length > 0
+
+    - name: Delete applications
+      ansible.tower.tower_application:
+        name: "{{ app_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ apps_to_delete }}"
+      loop_control:
+        loop_var: app_item
+      when: apps_to_delete | length > 0
+
+    - name: Delete workflows
+      ansible.tower.tower_workflow_job_template:
+        name: "{{ workflow_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ workflow_to_delete }}"
+      loop_control:
+        loop_var: workflow_item
+      when: workflow_to_delete | length > 0
+
+    - name: Delete jobs
+      ansible.tower.tower_job_template:
+        name: "{{ job_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ jobs_to_delete }}"
+      loop_control:
+        loop_var: job_item
+      when: jobs_to_delete | length > 0
+
+    - name: Delete inventories
+      ansible.tower.tower_inventory:
+        name: "{{ inventory_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ inventory_to_delete }}"
+      loop_control:
+        loop_var: inventory_item
+      when: inventory_to_delete | length > 0
+
+    - name: Delete projects
+      ansible.tower.tower_project:
+        name: "{{ project_item }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ projects_to_delete }}"
+      loop_control:
+        loop_var: project_item
+      when: projects_to_delete | length > 0
+
+    - name: Delete credentials
+      ansible.tower.tower_credential:
+        name: "{{ cred_item.key }}"
+        kind: "{{ cred_item.value }}"
+        organization: "{{ current_org }}"
+        state: absent
+      loop: "{{ creds_to_delete | dict2items }}"
+      loop_control:
+        loop_var: cred_item
+      when: creds_to_delete | length > 0
+
+    - name: Delete organizations
+      ansible.tower.tower_organization:
+        name: "{{ current_org }}"
+        state: absent
+
+  when: confirm_delete | bool

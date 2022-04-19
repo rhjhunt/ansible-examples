@@ -1,0 +1,21 @@
+---
+- name: Get Tower Orgs
+  hosts: all
+  vars:
+    tower_host: '{{ lookup("env", "TOWER_HOST") }}'
+    tower_username: '{{ lookup("env", "TOWER_USERNAME") }}'
+    tower_oauthtoken: '{{ lookup("env", "TOWER_OAUTH_TOKEN") | default(omit) }}'
+    tower_password: '{{ lookup("env", "TOWER_PASSWORD") | default(omit) }}'
+    tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
+    confirm_delete: false
+    show_list: true
+    orgs:
+      - default([])
+
+  tasks:
+
+    - name: Loop through each Org
+      ansible.builtin.include_tasks: tower_delete_artifacts.yml
+      vars:
+        current_org: "{{ item }}"
+      loop: "{{ orgs }}"
