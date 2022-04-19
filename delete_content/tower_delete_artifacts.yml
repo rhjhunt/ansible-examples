@@ -3,6 +3,10 @@
   ansible.builtin.set_fact:
     org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') }}"
 
+- name: Show Org ID
+  ansible.builtin.debug:
+    msg: "{{ org_id }}"
+
 - name: Get credentials list from organizations
   ansible.builtin.set_fact:
     creds: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='name') | list }}"
