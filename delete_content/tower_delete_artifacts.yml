@@ -1,11 +1,15 @@
 ---
+- name: Show current org
+  ansible.builtin.debug:
+    msg: "{{ current_org }}"
+
 - name: Generate Org ID list from Org names
   ansible.builtin.set_fact:
     org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') }}"
 
 - name: Show Org ID
   ansible.builtin.debug:
-    msg: "{{ org_id }}"
+    msg: "{{ org_id[0] }}"
 
 - name: Get credentials list from organizations
   ansible.builtin.set_fact:
