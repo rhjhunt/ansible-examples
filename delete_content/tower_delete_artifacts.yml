@@ -9,7 +9,7 @@
 
 - name: Show Org ID
   ansible.builtin.debug:
-    msg: "{{ org_id[0] }}"
+    msg: "{{ org_id | type_debug }}"
 
 - name: Get credentials list from organizations
   ansible.builtin.set_fact:
