@@ -9,8 +9,6 @@
     tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
     confirm_delete: false
     show_list: true
-    orgs:
-      - default([])
 
   tasks:
 
