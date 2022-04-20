@@ -14,7 +14,7 @@ Next create a new Job Template that will use this playbook in the project you ha
 setup for access. In the **CREDENTIALS** field make sure to include your _Machine_
 credential to access your inventory and the _Ansible Tower_ credential you just created.
 
-[logo]: images/delete-org-job-template.png "Delete Organization Job Template"
+![Delete Organization Job Template](images/delete-org-job-template.png)
 
 You will also want to set a **LIMIT** of one host, since you only need the
 job template to run once.
