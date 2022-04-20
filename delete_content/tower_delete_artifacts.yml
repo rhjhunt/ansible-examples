@@ -5,7 +5,7 @@
 
 - name: Generate Org ID list from Org names
   ansible.builtin.set_fact:
-    org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') }}"
+    org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') | list }}"
 
 - name: Show Org ID
   ansible.builtin.debug:
