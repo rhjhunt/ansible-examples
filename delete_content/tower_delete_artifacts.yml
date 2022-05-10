@@ -87,6 +87,11 @@
       ansible.tower.tower_user:
         username: "{{ user_item }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ users_to_delete }}"
       loop_control:
         loop_var: user_item
@@ -97,6 +102,11 @@
         name: "{{ team_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ teams_to_delete }}"
       loop_control:
         loop_var: team_item
@@ -107,6 +117,11 @@
         name: "{{ app_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ apps_to_delete }}"
       loop_control:
         loop_var: app_item
@@ -117,6 +132,11 @@
         name: "{{ workflow_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ workflow_to_delete }}"
       loop_control:
         loop_var: workflow_item
@@ -127,6 +147,11 @@
         name: "{{ job_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs_to_delete }}"
       loop_control:
         loop_var: job_item
@@ -137,6 +162,11 @@
         name: "{{ inventory_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ inventory_to_delete }}"
       loop_control:
         loop_var: inventory_item
@@ -147,6 +177,11 @@
         name: "{{ project_item }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ projects_to_delete }}"
       loop_control:
         loop_var: project_item
@@ -158,6 +193,11 @@
         credential_type: "{{ cred_item.value }}"
         organization: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ creds_to_delete | dict2items }}"
       loop_control:
         loop_var: cred_item
@@ -167,5 +207,10 @@
       ansible.tower.tower_organization:
         name: "{{ current_org }}"
         state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
 
   when: confirm_delete | bool
