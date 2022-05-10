@@ -9,11 +9,11 @@
 
 - name: Get credential type list
   ansible.builtin.set_fact:
-    cred_kind: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='kind') | list }}"
+    cred_type: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='summary_fields.credential_type.name') | list }}"
 
 - name: Build credential dictionary from credentials and types
   ansible.builtin.set_fact:
-    creds_to_delete: "{{ dict(creds | zip(cred_kind)) }}"
+    creds_to_delete: "{{ dict(creds | zip(cred_type)) }}"
 
 - name: Get project list from organizations
   ansible.builtin.set_fact:
@@ -155,7 +155,7 @@
     - name: Delete credentials
       ansible.tower.tower_credential:
         name: "{{ cred_item.key }}"
-        kind: "{{ cred_item.value }}"
+        credential_type: "{{ cred_item.value }}"
         organization: "{{ current_org }}"
         state: absent
       loop: "{{ creds_to_delete | dict2items }}"

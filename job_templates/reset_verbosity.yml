@@ -26,4 +26,3 @@
         validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs }}"
       run_once: true
-
