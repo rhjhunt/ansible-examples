@@ -2,3 +2,4 @@
 collections:
   - name: ansible.tower
   - name: awx.awx
+  - name: redhat.satellite
