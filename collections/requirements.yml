@@ -1,5 +1,13 @@
 ---
 collections:
+    # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/tower
   - name: ansible.tower
+
+    # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller
+  - name: ansible.controller
+
+    # https://galaxy.ansible.com/awx/awx
   - name: awx.awx
+
+    # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/satellite
   - name: redhat.satellite

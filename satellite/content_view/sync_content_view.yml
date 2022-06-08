@@ -1,0 +1,9 @@
+---
+- name: Sync Content Views in Red Hat Satellite
+  hosts: all
+  vars:
+    sat_host: host
+    sat_username: username
+    sat_password: password
+  tasks:
+
