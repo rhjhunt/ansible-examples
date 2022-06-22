@@ -23,6 +23,10 @@
   ansible.builtin.set_fact:
     inventory_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/inventories', return_all=true) | map(attribute='name') | list }}"
 
+- name: Get inventory script list from organizations
+  ansible.builtin.set_fact:
+    inventory_scripts_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/inventory_scripts', return_all=true) | map(attribute='name') | list }}"
+
 - name: Get jobs list from organizations
   ansible.builtin.set_fact:
     jobs_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/job_templates', return_all=true) | map(attribute='name') | list }}"
@@ -57,6 +61,10 @@
     - name: Show inventories to delete
       ansible.builtin.debug:
         msg: "{{ inventory_to_delete }}"
+
+    - name: Show inventory scripts to delete
+      ansible.builtin.debug:
+        msg: "{{ inventory_scripts_to_delete }}"
 
     - name: Show jobs to delete
       ansible.builtin.debug:
