@@ -5,5 +5,19 @@
     sat_host: host
     sat_username: username
     sat_password: password
+    sat_org: Example
+    validate_certs: false
   tasks:
 
+    - name: Publish Content View
+      redhat.satellite.content_view_version:
+        username: "{{ sat_username }}"
+        password: "{{ sat_password }}"
+        server_url: "https://{{ sat_host }}"
+        content_view: cv-os-rhel-9
+        organization: "{{ sat_org }}"
+        lifecycle_environments:
+          - Library
+          - Dev
+          - QA
+          - Prod
