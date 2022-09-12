@@ -1,0 +1,42 @@
+---
+- name: Delete inactive users
+  hosts: all
+  vars:
+    days: 181
+    tower_host: '{{ lookup("env", "TOWER_HOST") }}'
+    tower_username: '{{ lookup("env", "TOWER_USERNAME") }}'
+    tower_oauthtoken: '{{ lookup("env", "TOWER_OAUTH_TOKEN") | default(omit) }}'
+    tower_password: '{{ lookup("env", "TOWER_PASSWORD") | default(omit) }}'
+    tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
+    confirm_delete: false
+    show_list: true
+
+  tasks:
+
+    - name: Get past date
+      ansible.builtin.set_fact:
+        past_date: "{{ '%Y-%m-%d'| strftime(ansible_date_time.epoch|int - (86400 * days)) }}"
+      run_once: true
+
+    - name: Get list of Tower users that haven't logged in for at least {{ days }} days
+      ansible.builtin.set_fact:
+        inactive_users: "{{ query('ansible.tower.tower_api', 'users', query_params={ 'last_login__lt': past_date }) | map(attribute='username') | list }}"
+
+    - name: Show inactive users
+      ansible.builtin.debug:
+        msg: "{{ inactive_users }}"
+      when: show_list
+
+    - name: Delete inactive users
+      ansible.tower.tower_user:
+        username: "{{ item }}"
+        state: absent
+        tower_host: "{{ tower_host }}"
+        tower_username: "{{ tower_username }}"
+        tower_oauthtoken: "{{ tower_oauthtoken }}"
+        tower_password: "{{ tower_password }}"
+        validate_certs: "{{ tower_verify_ssl }}"
+      loop: "{{ inactive_users }}"
+      when:
+        - inactive_users | length > 0
+        - confirm_delete
