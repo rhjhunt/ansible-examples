@@ -20,7 +20,7 @@
 
     - name: Get list of Tower users that haven't logged in for at least {{ days }} days
       ansible.builtin.set_fact:
-        inactive_users: "{{ query('ansible.tower.tower_api', 'users', query_params={ 'last_login__lt': past_date }) | map(attribute='username') | list }}"
+        inactive_users: "{{ query('ansible.tower.tower_api', 'users', query_params={ 'last_login__lt': past_date }, return_all=true) | map(attribute='username') | list }}"
 
     - name: Show inactive users
       ansible.builtin.debug:
