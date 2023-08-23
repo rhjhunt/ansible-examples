@@ -30,4 +30,5 @@ roles/**
 
 
 # End of https://www.toptal.com/developers/gitignore/api/ansibletower
-
+ansible.cfg
+inventory

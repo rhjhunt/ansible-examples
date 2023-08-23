@@ -1,13 +1,25 @@
 ---
 collections:
-    # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/tower
+  - name: ansible.posix
+
+  # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/tower
   - name: ansible.tower
 
-    # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller
+  # https://console.redhat.com/ansible/automation-hub/repo/published/ansible/controller
   - name: ansible.controller
 
-    # https://galaxy.ansible.com/awx/awx
+  # https://galaxy.ansible.com/awx/awx
   - name: awx.awx
 
-    # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/satellite
+  # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/satellite
   - name: redhat.satellite
+
+  # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/eap/
+  - name: redhat.eap
+
+  # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/runtimes_common/
+  - name: redhat.runtimes_common
+
+  # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/jws/
+  - name: redhat.jws
+...

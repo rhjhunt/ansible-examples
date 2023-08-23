@@ -1,0 +1,22 @@
+---
+- name: Red Hat EAP installation and configuration
+  hosts: all
+  vars:
+    eap_download_baseurl: "http://192.168.122.1/downloads/"
+    eap_enable: false
+  roles:
+    - redhat.eap.eap_install
+    - redhat.eap.eap_systemd
+    - redhat.eap.eap_driver
+    - redhat.eap.eap_utils
+  tasks:
+    - name: Install second driver
+      ansible.builtin.include_role:
+        name: redhat.eap.eap_driver
+      vars:
+        jdbc_driver_module_dir: "{{ eap_home }}/modules/org/mariadb/main"
+        jdbc_driver_version: 2.7.4
+        jdbc_driver_jar_filename: "mariadb-java-client-{{ jdbc_driver_version }}.jar"
+        jdbc_driver_jar_url: "https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/{{ jdbc_driver_version }}/mariadb-java-client-{{ jdbc_driver_version }}.jar"
+        jdbc_driver_module_name: "org.mariadb"
+...

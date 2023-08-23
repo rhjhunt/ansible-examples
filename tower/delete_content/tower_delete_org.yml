@@ -17,3 +17,4 @@
       vars:
         current_org: "{{ item }}"
       loop: "{{ orgs }}"
+...

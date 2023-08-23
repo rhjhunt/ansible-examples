@@ -12,7 +12,7 @@
 
     - name: Get list of templates with verbosity greater than 0
       ansible.builtin.set_fact:
-        jobs: "{{ query('ansible.tower.tower_api', 'job_templates', query_params={ 'verbosity__gt': '0' }, return_all=true) | map(attribute='name') | list }}"
+        jobs: "{{ query('ansible.tower.tower_api', 'job_templates', query_params={'verbosity__gt': '0'}, return_all=true) | map(attribute='name') | list }}"
       run_once: true
 
     - name: Change verbose level
@@ -26,3 +26,4 @@
         validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs }}"
       run_once: true
+...

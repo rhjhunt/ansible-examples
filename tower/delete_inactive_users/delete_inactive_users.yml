@@ -15,12 +15,12 @@
 
     - name: Get past date
       ansible.builtin.set_fact:
-        past_date: "{{ '%Y-%m-%d'| strftime(ansible_date_time.epoch|int - (86400 * days)) }}"
+        past_date: "{{ '%Y-%m-%d' | strftime(ansible_date_time.epoch | int - (86400 * days)) }}"
       run_once: true
 
-    - name: Get list of Tower users that haven't logged in for at least {{ days }} days
+    - name: Get list of Tower users that haven't logged in for at least {{ days }}
       ansible.builtin.set_fact:
-        inactive_users: "{{ query('ansible.tower.tower_api', 'users', query_params={ 'last_login__lt': past_date }, return_all=true) | map(attribute='username') | list }}"
+        inactive_users: "{{ query('ansible.tower.tower_api', 'users', query_params={'last_login__lt': past_date}, return_all=true) | map(attribute='username') | list }}"
 
     - name: Show inactive users
       ansible.builtin.debug:
@@ -40,3 +40,4 @@
       when:
         - inactive_users | length > 0
         - confirm_delete
+...

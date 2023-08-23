@@ -1,0 +1,24 @@
+---
+extends: default
+
+ignore: |
+  .github/
+  changelogs/
+
+rules:
+  line-length: disable
+  colons:
+    max-spaces-before: 0
+    max-spaces-after: -1
+  document-end:
+    present: true
+  indentation:
+    level: error
+    indent-sequences: true
+  truthy:
+    level: error
+    allowed-values:
+      - 'true'
+      - 'false'
+      - 'on'
+...

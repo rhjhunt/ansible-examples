@@ -1,7 +1,7 @@
 ---
 - name: Generate Org ID list from Org names
   ansible.builtin.set_fact:
-    org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={ 'name': current_org }, return_all=true) | map(attribute='id') | list }}"
+    org_id: "{{ query('ansible.tower.tower_api', 'organizations', query_params={'name': current_org}, return_all=true) | map(attribute='id') | list }}"
 
 - name: Get credentials list from organizations
   ansible.builtin.set_fact:
@@ -48,6 +48,7 @@
     users_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/users') | map(attribute='username') | list }}"
 
 - name: Show lists
+  when: show_list | bool
   block:
 
     - name: Show credentials to delete
@@ -86,9 +87,8 @@
       ansible.builtin.debug:
         msg: "{{ users_to_delete }}"
 
-  when: show_list | bool
-
 - name: Delete artifacts
+  when: confirm_delete | bool
   block:
 
     - name: Delete users
@@ -220,5 +220,4 @@
         tower_oauthtoken: "{{ tower_oauthtoken }}"
         tower_password: "{{ tower_password }}"
         validate_certs: "{{ tower_verify_ssl }}"
-
-  when: confirm_delete | bool
+...
