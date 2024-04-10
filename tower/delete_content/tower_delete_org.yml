@@ -11,10 +11,8 @@
     show_list: true
 
   tasks:
-
     - name: Loop through each Org
       ansible.builtin.include_tasks: tower_delete_artifacts.yml
       vars:
         current_org: "{{ item }}"
       loop: "{{ orgs }}"
-...

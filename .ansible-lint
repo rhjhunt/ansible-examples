@@ -1,7 +1,6 @@
 ---
 exclude_paths:
-  - '.github/'
-  - 'changelogs/'
+  - .github/
+  - changelogs/
 skip_list:
   - var-naming[no-role-prefix]
-...
