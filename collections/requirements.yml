@@ -22,4 +22,3 @@ collections:
 
   # https://console.redhat.com/ansible/automation-hub/repo/published/redhat/jws/
   - name: redhat.jws
-...

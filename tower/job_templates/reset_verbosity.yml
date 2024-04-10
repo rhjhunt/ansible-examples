@@ -9,7 +9,6 @@
     tower_password: '{{ lookup("env", "TOWER_PASSWORD") | default(omit) }}'
     tower_verify_ssl: '{{ lookup("env", "TOWER_VERIFY_SSL") }}'
   tasks:
-
     - name: Get list of templates with verbosity greater than 0
       ansible.builtin.set_fact:
         jobs: "{{ query('ansible.tower.tower_api', 'job_templates', query_params={'verbosity__gt': '0'}, return_all=true) | map(attribute='name') | list }}"
@@ -26,4 +25,3 @@
         validate_certs: "{{ tower_verify_ssl }}"
       loop: "{{ jobs }}"
       run_once: true
-...

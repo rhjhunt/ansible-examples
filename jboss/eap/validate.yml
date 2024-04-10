@@ -4,4 +4,3 @@
   gather_facts: false
   roles:
     - redhat.eap.eap_validation
-...

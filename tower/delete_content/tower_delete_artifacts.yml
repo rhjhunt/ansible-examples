@@ -9,7 +9,8 @@
 
 - name: Get credential type list
   ansible.builtin.set_fact:
-    cred_type: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='summary_fields.credential_type.name') | list }}"
+    cred_type: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/credentials', return_all=true) | map(attribute='summary_fields.credential_type.name')
+      | list }}"
 
 - name: Build credential dictionary from credentials and types
   ansible.builtin.set_fact:
@@ -25,7 +26,8 @@
 
 - name: Get inventory script list from organizations
   ansible.builtin.set_fact:
-    inventory_scripts_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/inventory_scripts', return_all=true) | map(attribute='name') | list }}"
+    inventory_scripts_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/inventory_scripts', return_all=true) | map(attribute='name')
+      | list }}"
 
 - name: Get jobs list from organizations
   ansible.builtin.set_fact:
@@ -33,7 +35,8 @@
 
 - name: Get workflow list from organizations
   ansible.builtin.set_fact:
-    workflow_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/workflow_job_templates', return_all=true) | map(attribute='name') | list }}"
+    workflow_to_delete: "{{ query('ansible.tower.tower_api', 'organizations/{{ org_id[0] }}/workflow_job_templates', return_all=true) | map(attribute='name') | list
+      }}"
 
 - name: Get applications list from organizations
   ansible.builtin.set_fact:
@@ -50,7 +53,6 @@
 - name: Show lists
   when: show_list | bool
   block:
-
     - name: Show credentials to delete
       ansible.builtin.debug:
         msg: "{{ creds_to_delete }}"
@@ -90,7 +92,6 @@
 - name: Delete artifacts
   when: confirm_delete | bool
   block:
-
     - name: Delete users
       ansible.tower.tower_user:
         username: "{{ user_item }}"
@@ -220,4 +221,3 @@
         tower_oauthtoken: "{{ tower_oauthtoken }}"
         tower_password: "{{ tower_password }}"
         validate_certs: "{{ tower_verify_ssl }}"
-...
